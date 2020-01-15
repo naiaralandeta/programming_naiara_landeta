@@ -26,6 +26,7 @@ score_matrix = {'AA': 2, 'AC':-1, 'AT':-1, 'AG': 0,
                'TA':-1, 'TC': 0, 'TT': 2, 'TG':-1,
                'GA': 0, 'GC':-1, 'GT':-1, 'GG': 2}
 
+
 #ungapped_seq1 = ["--TCA", "-TCA", "TCA", "TCA", "TCA-", "TCA--"]
 #ungapped_seq2 = ["GA---", "GA--", "GA-", "-GA", "--GA", "---GA"]
 

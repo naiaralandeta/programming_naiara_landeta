@@ -26,6 +26,7 @@ scoring_matrix = {"AA": 2, "AC": -1, "AT": -1, "AG": 0, "CA": -1, "CC": 2, "CT":
 
 def combinations(seq1, seq2):
     list_seq1 = []; list_seq2 = []; total_len = len(seq1) + len(seq2)
+
     for i in range(total_len - 1):
         if i > 0 and i <= total_len - len(seq2):
             list_seq2.append("-"*i + seq2)
@@ -40,7 +41,7 @@ def combinations(seq1, seq2):
                 list_seq1.append(seq1 + "-"*i)
             elif i == 1:
                 list_seq1.append("-"*i + seq1)
-                
+
     return list_seq1, list_seq2 
             
 def score_alignment(list_seq1, list_seq2):

@@ -1,0 +1,31 @@
+1.
+We discovered tht we can align two sequences with two techniques. One is global alignment,
+means all the residues have to be align between the two sequences (coverage), and the local 
+alignment. It means that a part of two sequences have to align good within the other. In both 
+cases the alignments are going to have a score. 
+If the residues are the same the score will be the best, if the residues are physico-quimical 
+similary the scores will be good. On the othe hand if the resudies are complety different the 
+score will be negative. This occurs when one of both of the residues are a gap, we will score 
+with the gap penalty. Also, if the gap are more than one residue we will count the open gap 
+penalty and the gap penalty for all the gaps.
+
+2, 3.
+We have seen two types of scoring matrices for the alignment of two sequences.
+The first was PAM (Point Accepted Mutation), which was used to know the frequency of an amino
+ acids changed in specific position (Mutation) in a random way (natural selection). This give
+ you us an idea about the closely evolutionary relation between sequences. PAM matrix derived
+ from evolutionary model and the type of the process is a global alignment. In its results we
+ can know that the higher scoring are greter closely evolutionary.
+The second one was the BLOSUM (Block Substitution Matrix). It was derived form experimental data. 
+The developers used a database with curated data (Block), ungapped and with x% of similary between 
+sequences. We used this matrix to determinate how divergence is a sequences to another. The 
+alignment to get the matrix is a local. We know that the higher scoring in the matrix indicated 
+that the evolutionary divergent is big.
+4.
+Needleman and Wunch algorithm is a dynamic programming algorithm. This means that we will obtain 
+a matrix with optaim results without repreat values. That give us the best alignment of the sequences.
+ In order to use the matrix is similar to know how the matrix works. We are going to have two sequence
+ A and B with a length “a” and “b”. We will make a matrix with the dimensions (“a”+1 ) * (“b”+ 1) = F. 
+Then we will fill the sequences with the base case F(0,0) = 0 and then wi will obtain the differents
+ alignments with the fill the first row (-i * d) and column(-j * d) with the gap penalty value = d and 
+later in the recursivly way the best alignments F(i,j).

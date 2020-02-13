@@ -14,7 +14,7 @@ best alignment:
 
 (No) Generate all the local alignments
 
-(No) Stop when we find the first 0 (while != 0)
+(Si) Stop when we find the first 0 (while != 0)
 
 (No) Check that the values are not incluide in other alignments
 
@@ -42,11 +42,11 @@ def local_align(s1, s2, sub_matrix, d):
     # Init. rows
     for i in range(rows):
         F[i][0] = 0
-        P[i][0] = 'l'
+        P[i][0] = 'u'
     # Init. columns
     for j in range(columns):
         F[0][j] = 0
-        P[0][j] = 'u'
+        P[0][j] = 'l'
         
     # Iteration to fill matrices P and F
     for i in range(1, rows): # Rows
@@ -56,7 +56,7 @@ def local_align(s1, s2, sub_matrix, d):
             sColumn = F[i-1][j] + d # Fill columns
             sRow = F[i][j-1] + d # Fill rows
             
-            # Get the maximun value
+            # Get the maximun value, we consider 0 in the case that the values are negative
             max_value = max(sDiagonal, sColumn, sRow, 0)
             
             # Add u = up, l = left and d = diagonal in the matrix P
@@ -84,46 +84,74 @@ def start_alignment(F):
                 pos_j = j
     return pos_i,pos_j
 
-def alignment(s1, s2, F, P):
-    print_matrix(F)
+def all_alignments(F):
+    list_l =[]
+    for i in range(len(F)):
+        for j in range(len(F[0])):
+            
+            if list_l == [] and F[i][j] > 0:
+                list_l.append([i,j])
+                
+            if list_l != [] and F[i][j] > 0 and not [i,j] in list_l:
+                list_l.append([i,j])
+        #No etsa bien       
+        for i in range(len(list_l)):
+            element_1 = list_l[i]; y = element_1[0]; z = element_1[1]
+            for j in range(i, len(list_l)):
+                element_2 = list_l[j]; w = element_2[0]; q = element_2[1]
+                if F[y][z] < F[w][q]:
+                    list_l.remove([w,q])
+                    list_l.insert(j-1,[w,q])
+    
+    print(list_l)
     print("\n")
-    print_matrix(P)
+    return list_l
+          
+def alignment(s1, s2, F, P):
     """ 
     This function will align the s1 and the s2 using P matrix. 
     In the case of matrix F, we wil use to extract the value of the alignment
     """
-   # Select the position to start the alignment
-    i, j = start_alignment(F) 
-    template = ""; target = ""; score = F[i][j]
-    while i != 0 and j != 0 :
-        # Use gaps when the movement is to left or up, we are add a gap "-". Means no match.
-        # Right - Target, Up - Template
-        if P[i][j] == "d":
-            template += s1[i - 1]
-            target += s2[j - 1]
-            i -= 1
-            j -= 1  
-        elif P[i][j] == "l":
-            template += s1[i - 1]
-            target += "-"
-            i -= 1
-            j -= 1
-        else:
-            template += "-"
-            target += s2[j - 1]
-            i -= 1
-            j -= 1
-    # Reverse template and target 
-    template = template[::-1]
-    target = target[::-1]
-    print(template)
-    print(target)
-    print(score)
+    print_matrix(F)
+    list_l = all_alignments(F); list_position = []
+   # List_l have all the possible alignments
+    for x in list_l:
+        i = x[0]; j = x[1]; isInList = False; template = ""; target = ""; score = F[i][j]
+        while i != 0 and j != 0 and F[i][j] != 0:
+            if not [i,j] in list_position:
+                # Use gaps when the movement is to left or up, we are add a gap "-". Means no match.
+                list_position.append([i,j])
+                if P[i][j] == "d":
+                    template += s1[i - 1]
+                    target += s2[j - 1]
+                    i -= 1; j -= 1  
+                # Left - target   
+                elif P[i][j] == "l":
+                    template += s1[i - 1]
+                    target += "-"
+                    i -= 1; j -= 1
+                # Up - template 
+                else:
+                    template += "-"
+                    target += s2[j - 1]
+                    i -= 1; j -= 1
+            else:
+                isInList = True
+                i -= 1; j -= 1
+                
+         # if the position are not in list_position print the result
+        if not isInList:
+            template = template[::-1]
+            target = target[::-1]
+            print("S1:", template)
+            print("S2:", target)
+            print("Score:", score)
+            print("\n")
 
 if __name__ == "__main__":
     # Sequences without gaps
-    s1 = "ATTAA" # Rows
-    s2 = "ACTCT" #Columns
+    s1 = "ACTCT" # Rows
+    s2 = "ATTAA" #Columns
     d = -2
     
     sub_matrix = {"AA": 2, "AC": -1, "AT": -1, "AG": 0,

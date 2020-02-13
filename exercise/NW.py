@@ -55,9 +55,9 @@ def global_align(s1, s2, sub_matrix, d):
     return F,P
 
 def alignment(s1, s2, F, P):
-    print_matrix(F)
-    print("\n")
-    print_matrix(P)
+   # print_matrix(F)
+   # print("\n")
+   # print_matrix(P)
     
     """ 
     This function will align the s1 and the s2 using P matrix. 
@@ -67,7 +67,7 @@ def alignment(s1, s2, F, P):
     template = ""; target = ""; score = F[i][j]
     while i != 0 and j != 0:
         # Use gaps when the movement is to left or up, we are add a gap "-". Means no match.
-        # Right - Target, Up - Template
+        # Left - Target, Up - Template
         if P[i][j] == "d":
             template += s1[i - 1]
             target += s2[j - 1]
@@ -92,8 +92,8 @@ def alignment(s1, s2, F, P):
 
 if __name__ == "__main__":
     # Sequences without gaps
-    s1 = "ACTGG" # Rows
-    s2 = "ACCA" # Columns
+    s1 = "ACCCA" # Rows
+    s2 = "ACT" # Columns
     d = -2
     
     sub_matrix = {"AA": 2, "AC": -1, "AT": -1, "AG": 0,
